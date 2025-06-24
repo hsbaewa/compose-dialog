@@ -8,4 +8,7 @@ plugins {
 
     // Kotlin
     alias(libs.plugins.jetbrains.kotlin.android) apply false
+
+    // 참고 : https://cocoslime.github.io/blog/Android-Library-Maven-Central/
+    alias(libs.plugins.maven.publish) apply false // 대체 플러그인
 }
