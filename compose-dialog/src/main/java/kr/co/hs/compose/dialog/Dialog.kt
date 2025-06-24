@@ -63,6 +63,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 
 //import kr.co.hs.securefile.presentation.compose.Checkbox
@@ -1058,6 +1059,8 @@ private fun PreviewShowAlertDialog2() = ShowAlertDialog(
 @Composable
 fun DefaultDialogImpl(
     modifier: Modifier = Modifier,
+    properties: DialogProperties = DialogProperties(),
+    surfaceModifier: Modifier = Modifier,
     shape: Shape = AlertDialogDefaults.shape,
     containerColor: Color = AlertDialogDefaults.containerColor,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
@@ -1081,11 +1084,13 @@ fun DefaultDialogImpl(
     onDismiss: (() -> Unit)? = null
 ) {
     BasicAlertDialog(
-        onDismissRequest = { if (cancelable && !loading) onDismiss?.invoke() }
+        onDismissRequest = { if (cancelable && !loading) onDismiss?.invoke() },
+        properties = properties,
+        modifier = modifier
     ) {
 
         Surface(
-            modifier = modifier,
+            modifier = surfaceModifier,
             shape = shape,
             color = containerColor,
             tonalElevation = tonalElevation,
