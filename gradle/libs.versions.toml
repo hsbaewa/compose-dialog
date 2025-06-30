@@ -30,7 +30,7 @@ pagingRuntimeKtx = "3.3.6"
 viewpager2 = "1.1.0"
 
 # Compose by hsbaewa #
-hs-compose = "0.0.4"
+hs-compose = "0.0.5"
 
 
 [libraries]

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -27,7 +28,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -38,7 +38,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -56,7 +55,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,11 +62,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
+import kr.co.hs.compose.Checkbox
 import kr.co.hs.compose.DialogTextButton
 import kr.co.hs.compose.OutlinedTextField
-
-//import kr.co.hs.securefile.presentation.compose.Checkbox
-//import kr.co.hs.securefile.presentation.compose.RadioGroup
+import kr.co.hs.compose.RadioGroup
 
 
 /**
@@ -643,82 +640,82 @@ fun ShowRequestAudioReadPermission(
 )
 
 
-//@Composable
-//fun ShowRequestPermissionConfirm(
-//    title: String? = null,
-//    message: String,
-//    permissions: Array<String>,
-//    cancelable: Boolean = true,
-//    checkBox: String? = null,
-//    onCheckedChange: ((Boolean) -> Unit)? = null,
-//    confirm: String = "Apply",
-//    cancel: String = "Deny",
-//    onDismiss: (() -> Unit)? = null,
-//    onResult: (Boolean) -> Unit
-//) {
-//    val activity = LocalContext.current as Activity
-//    val packageInfo =
-//        activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_PERMISSIONS)
-//    val requestedPermissions = packageInfo.requestedPermissions
-//    val existsPermissions = permissions.filter { requestedPermissions?.contains(it) ?: false }
-//
-//    if (existsPermissions.isEmpty()) {
-//        // 요청한 권한중 정의 된 권한이 1개도 없음.
-//        onResult(false)
-//        return
-//    }
-//
-//    val grantedRequestPermissions = existsPermissions
-//        .none { p -> activity.checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED }
-//
-//    val alreadyDenied = existsPermissions
-//        .any { p -> ActivityCompat.shouldShowRequestPermissionRationale(activity, p) }
-//
-//    if (grantedRequestPermissions) {
-//        onResult(true)
-//    } else {
-//        if (alreadyDenied) {
-//            onResult(false)
-//        }
-//    }
-//
-//    var isShow by remember { mutableStateOf(!grantedRequestPermissions && !alreadyDenied) }
-//    if (!isShow) return
-//
-//    val requestPermissionsLauncher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.RequestMultiplePermissions(),
-//        onResult = {
-//            it.values
-//                .any { granted -> granted }
-//                .apply {
-//                    isShow = false
-//                    onResult(this)
-//                }
-//        }
-//    )
-//
-//    ShowConfirmDialog(
-//        title = title,
-//        message = message,
-//        checkBox = checkBox,
-//        onCheckedChange = onCheckedChange,
-//        cancelable = cancelable,
-//        confirm = confirm,
-//        onConfirm = {
-//            requestPermissionsLauncher.launch(existsPermissions.toTypedArray())
-//            false
-//        },
-//        cancel = cancel,
-//        onCancel = {
-//            onResult(false)
-//            true
-//        },
-//        onDismiss = {
-//            isShow = false
-//            onDismiss?.invoke()
-//        }
-//    )
-//}
+@Composable
+fun ShowRequestPermissionConfirm(
+    title: String? = null,
+    message: String,
+    permissions: Array<String>,
+    cancelable: Boolean = true,
+    checkBox: String? = null,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) {
+    val activity = LocalContext.current as Activity
+    val packageInfo =
+        activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_PERMISSIONS)
+    val requestedPermissions = packageInfo.requestedPermissions
+    val existsPermissions = permissions.filter { requestedPermissions?.contains(it) ?: false }
+
+    if (existsPermissions.isEmpty()) {
+        // 요청한 권한중 정의 된 권한이 1개도 없음.
+        onResult(false)
+        return
+    }
+
+    val grantedRequestPermissions = existsPermissions
+        .none { p -> activity.checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED }
+
+    val alreadyDenied = existsPermissions
+        .any { p -> ActivityCompat.shouldShowRequestPermissionRationale(activity, p) }
+
+    if (grantedRequestPermissions) {
+        onResult(true)
+    } else {
+        if (alreadyDenied) {
+            onResult(false)
+        }
+    }
+
+    var isShow by remember { mutableStateOf(!grantedRequestPermissions && !alreadyDenied) }
+    if (!isShow) return
+
+    val requestPermissionsLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = {
+            it.values
+                .any { granted -> granted }
+                .apply {
+                    isShow = false
+                    onResult(this)
+                }
+        }
+    )
+
+    ShowConfirmDialog(
+        title = title,
+        message = message,
+        checkBox = checkBox,
+        onCheckedChange = onCheckedChange,
+        cancelable = cancelable,
+        confirm = confirm,
+        onConfirm = {
+            requestPermissionsLauncher.launch(existsPermissions.toTypedArray())
+            false
+        },
+        cancel = cancel,
+        onCancel = {
+            onResult(false)
+            true
+        },
+        onDismiss = {
+            isShow = false
+            onDismiss?.invoke()
+        }
+    )
+}
 
 @Composable
 fun ShowErrorDialog(
@@ -771,212 +768,212 @@ private fun PreviewShowAlertDialog2() = ShowAlertDialog(
     message = "message"
 )
 
-//@Composable
-//fun ShowConfirmDialog(
-//    title: String? = null,
-//    message: String,
-//    checkBox: String? = null,
-//    onCheckedChange: ((Boolean) -> Unit)? = null,
-//    cancelable: Boolean = true,
-//    confirm: String = "Confirm",
-//    onConfirm: (() -> Boolean)? = null,
-//    neutral: String? = null,
-//    onNeutral: (() -> Boolean)? = null,
-//    cancel: String = "Cancel",
-//    onCancel: (() -> Boolean)? = null,
-//    onDismiss: (() -> Unit)? = null
-//) {
-//    var isShow by remember { mutableStateOf(true) }
-//    if (!isShow) return
-//
-//    DefaultDialogImpl(
-//        title = title,
-//        message = message,
-//        content = if (checkBox != null) {
-//            {
-//                var checked by remember { mutableStateOf(false) }
-//                val view = LocalView.current
-//                Checkbox(
-//                    checked = checked,
-//                    label = checkBox,
-//                    spaceWithLabel = 8.dp,
-//                    onCheckedChange = {
-//                        view.playSoundEffect(SoundEffectConstants.CLICK)
-//                        checked = it
-//                        onCheckedChange?.invoke(it)
-//                    }
-//                )
-//            }
-//        } else null,
-//        cancelable = cancelable,
-//        confirm = confirm,
-//        onConfirm = { onConfirm?.invoke() ?: true },
-//        neutral = neutral,
-//        onNeutral = onNeutral,
-//        cancel = cancel,
-//        onCancel = { onCancel?.invoke() ?: true },
-//        onDismiss = {
-//            isShow = false
-//            onDismiss?.invoke()
-//        }
-//    )
-//}
+@Composable
+fun ShowConfirmDialog(
+    title: String? = null,
+    message: String,
+    checkBox: String? = null,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
+    cancelable: Boolean = true,
+    confirm: String = "Confirm",
+    onConfirm: (() -> Boolean)? = null,
+    neutral: String? = null,
+    onNeutral: (() -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) {
+    var isShow by remember { mutableStateOf(true) }
+    if (!isShow) return
 
-//@Preview
-//@Composable
-//private fun PreviewShowConfirmDialog1() = ShowConfirmDialog(
-//    title = "title",
-//    message = "fdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfwef"
-//)
+    DefaultDialogImpl(
+        title = title,
+        message = message,
+        content = if (checkBox != null) {
+            {
+                var checked by remember { mutableStateOf(false) }
+                val view = LocalView.current
+                Checkbox(
+                    checked = checked,
+                    label = checkBox,
+                    spaceWithLabel = 8.dp,
+                    onCheckedChange = {
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        checked = it
+                        onCheckedChange?.invoke(it)
+                    }
+                )
+            }
+        } else null,
+        cancelable = cancelable,
+        confirm = confirm,
+        onConfirm = { onConfirm?.invoke() ?: true },
+        neutral = neutral,
+        onNeutral = onNeutral,
+        cancel = cancel,
+        onCancel = { onCancel?.invoke() ?: true },
+        onDismiss = {
+            isShow = false
+            onDismiss?.invoke()
+        }
+    )
+}
 
-//@Preview
-//@Composable
-//private fun PreviewShowConfirmDialog2() = ShowConfirmDialog(
-//    message = "message",
-//    cancel = "c"
-//)
+@Preview
+@Composable
+private fun PreviewShowConfirmDialog1() = ShowConfirmDialog(
+    title = "title",
+    message = "fdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfwef"
+)
 
-//@Preview
-//@Composable
-//private fun PreviewShowConfirmDialog3() = ShowConfirmDialog(
-//    title = "title",
-//    message = "fdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfwef",
-//    checkBox = "오늘 다시"
-//)
+@Preview
+@Composable
+private fun PreviewShowConfirmDialog2() = ShowConfirmDialog(
+    message = "message",
+    cancel = "c"
+)
 
-//@Composable
-//fun ShowSelectSingleDialog(
-//    title: String? = null,
-//    message: String? = null,
-//    cancelable: Boolean = true,
-//    initialSelectedIndex: Int,
-//    list: List<String>,
-//    confirm: String = "Confirm",
-//    onConfirm: ((Int) -> Boolean)? = null,
-//    cancel: String = "Cancel",
-//    onCancel: (() -> Boolean)? = null,
-//    onDismiss: (() -> Unit)? = null
-//) {
-//    var isShow by remember { mutableStateOf(true) }
-//    if (!isShow) return
-//
-//    var selected by remember { mutableIntStateOf(initialSelectedIndex) }
-//    var enabledConfirm by remember { mutableStateOf(true) }
-//    enabledConfirm = initialSelectedIndex != selected
-//
-//    DefaultDialogImpl(
-//        title = title,
-//        message = message,
-//        cancelable = cancelable,
-//        confirm = confirm,
-//        enabledConfirm = enabledConfirm,
-//        onConfirm = { onConfirm?.invoke(selected) ?: true },
-//        cancel = cancel,
-//        onCancel = { onCancel?.invoke() ?: true },
-//        onDismiss = {
-//            isShow = false
-//            onDismiss?.invoke()
-//        },
-//        content = {
-//            RadioGroup(
-//                modifier = Modifier.fillMaxWidth(),
-//                list = list,
-//                spaceWithLabel = 8.dp,
-//                selected = initialSelectedIndex,
-//                onSelectedIndex = { selected = it }
-//            )
-//        }
-//    )
-//}
+@Preview
+@Composable
+private fun PreviewShowConfirmDialog3() = ShowConfirmDialog(
+    title = "title",
+    message = "fdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfweffdsfgrrwfrwfwfwef",
+    checkBox = "오늘 다시"
+)
 
-//@Preview
-//@Composable
-//private fun PreviewShowSelectSingleDialog() = ShowSelectSingleDialog(
-//    title = "asda",
-//    message = "asdasdasdsa",
-//    initialSelectedIndex = 0,
-//    list = listOf("1", "2", "3"),
-//    onConfirm = { true }
-//)
+@Composable
+fun ShowSelectSingleDialog(
+    title: String? = null,
+    message: String? = null,
+    cancelable: Boolean = true,
+    initialSelectedIndex: Int,
+    list: List<String>,
+    confirm: String = "Confirm",
+    onConfirm: ((Int) -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) {
+    var isShow by remember { mutableStateOf(true) }
+    if (!isShow) return
 
-//@Composable
-//fun ShowSelectMultipleDialog(
-//    title: String? = null,
-//    message: String? = null,
-//    cancelable: Boolean = true,
-//    initialSelectedIndex: List<Int>,
-//    list: List<String>,
-//    confirm: String = "Confirm",
-//    onConfirm: ((List<Int>) -> Boolean)? = null,
-//    cancel: String = "Cancel",
-//    onCancel: (() -> Boolean)? = null,
-//    onDismiss: (() -> Unit)? = null
-//) {
-//    var isShow by remember { mutableStateOf(true) }
-//    if (!isShow) return
-//
-//    val selected = remember { mutableStateListOf<Int>().apply { addAll(initialSelectedIndex) } }
-//    var enabledConfirm by remember { mutableStateOf(true) }
-//    enabledConfirm = selected.toSet() != initialSelectedIndex.toSet()
-//
-//    DefaultDialogImpl(
-//        title = title,
-//        message = message,
-//        cancelable = cancelable,
-//        confirm = confirm,
-//        enabledConfirm = enabledConfirm,
-//        onConfirm = { onConfirm?.invoke(selected) ?: true },
-//        cancel = cancel,
-//        onCancel = { onCancel?.invoke() ?: true },
-//        onDismiss = {
-//            isShow = false
-//            onDismiss?.invoke()
-//        },
-//        content = {
-//            Column(
-//                modifier = Modifier.fillMaxWidth()
-//            ) {
-//                list.forEachIndexed { index, s ->
-//                    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-//
-//                        val view = LocalView.current
-//
-//                        Card(
-//                            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-//                            shape = CircleShape,
-//                            onClick = {
-//                                view.playSoundEffect(SoundEffectConstants.CLICK)
-//                                if (selected.contains(index)) {
-//                                    selected.remove(index)
-//                                } else {
-//                                    selected.add(index)
-//                                }
-//                            }
-//                        ) {
-//                            Checkbox(
-//                                checked = selected.contains(index),
-//                                label = s,
-//                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
-//                                spaceWithLabel = 8.dp,
-//                                onCheckedChange = null
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    )
-//}
+    var selected by remember { mutableIntStateOf(initialSelectedIndex) }
+    var enabledConfirm by remember { mutableStateOf(true) }
+    enabledConfirm = initialSelectedIndex != selected
 
-//@Preview
-//@Composable
-//private fun PreviewShowSelectMultipleDialog() = ShowSelectMultipleDialog(
-//    title = "asda",
-//    message = "asdasdasdsa",
-//    initialSelectedIndex = listOf(0, 2),
-//    list = listOf("1", "2", "3"),
-//    onConfirm = { true }
-//)
+    DefaultDialogImpl(
+        title = title,
+        message = message,
+        cancelable = cancelable,
+        confirm = confirm,
+        enabledConfirm = enabledConfirm,
+        onConfirm = { onConfirm?.invoke(selected) ?: true },
+        cancel = cancel,
+        onCancel = { onCancel?.invoke() ?: true },
+        onDismiss = {
+            isShow = false
+            onDismiss?.invoke()
+        },
+        content = {
+            RadioGroup(
+                modifier = Modifier.fillMaxWidth(),
+                list = list,
+                spaceWithLabel = 8.dp,
+                selected = initialSelectedIndex,
+                onSelectedIndex = { selected = it }
+            )
+        }
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewShowSelectSingleDialog() = ShowSelectSingleDialog(
+    title = "asda",
+    message = "asdasdasdsa",
+    initialSelectedIndex = 0,
+    list = listOf("1", "2", "3"),
+    onConfirm = { true }
+)
+
+@Composable
+fun ShowSelectMultipleDialog(
+    title: String? = null,
+    message: String? = null,
+    cancelable: Boolean = true,
+    initialSelectedIndex: List<Int>,
+    list: List<String>,
+    confirm: String = "Confirm",
+    onConfirm: ((List<Int>) -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) {
+    var isShow by remember { mutableStateOf(true) }
+    if (!isShow) return
+
+    val selected = remember { mutableStateListOf<Int>().apply { addAll(initialSelectedIndex) } }
+    var enabledConfirm by remember { mutableStateOf(true) }
+    enabledConfirm = selected.toSet() != initialSelectedIndex.toSet()
+
+    DefaultDialogImpl(
+        title = title,
+        message = message,
+        cancelable = cancelable,
+        confirm = confirm,
+        enabledConfirm = enabledConfirm,
+        onConfirm = { onConfirm?.invoke(selected) ?: true },
+        cancel = cancel,
+        onCancel = { onCancel?.invoke() ?: true },
+        onDismiss = {
+            isShow = false
+            onDismiss?.invoke()
+        },
+        content = {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                list.forEachIndexed { index, s ->
+                    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+
+                        val view = LocalView.current
+
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                            shape = CircleShape,
+                            onClick = {
+                                view.playSoundEffect(SoundEffectConstants.CLICK)
+                                if (selected.contains(index)) {
+                                    selected.remove(index)
+                                } else {
+                                    selected.add(index)
+                                }
+                            }
+                        ) {
+                            Checkbox(
+                                checked = selected.contains(index),
+                                label = s,
+                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
+                                spaceWithLabel = 8.dp,
+                                onCheckedChange = null
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewShowSelectMultipleDialog() = ShowSelectMultipleDialog(
+    title = "asda",
+    message = "asdasdasdsa",
+    initialSelectedIndex = listOf(0, 2),
+    list = listOf("1", "2", "3"),
+    onConfirm = { true }
+)
 
 @Composable
 fun ShowInputDialog(
