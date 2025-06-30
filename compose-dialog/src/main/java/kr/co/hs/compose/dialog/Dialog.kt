@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -65,10 +64,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
+import kr.co.hs.compose.DialogTextButton
+import kr.co.hs.compose.OutlinedTextField
 
 //import kr.co.hs.securefile.presentation.compose.Checkbox
 //import kr.co.hs.securefile.presentation.compose.RadioGroup
-//import kr.co.hs.securefile.presentation.compose.SecFileOutlinedTextField
 
 
 /**
@@ -978,81 +978,81 @@ private fun PreviewShowAlertDialog2() = ShowAlertDialog(
 //    onConfirm = { true }
 //)
 
-//@Composable
-//fun ShowInputDialog(
-//    title: String? = null,
-//    message: String? = null,
-//    placeHolder: String? = null,
-//    text: String? = null,
-//    onFocusedText: ((TextFieldValue) -> TextFieldValue)? = null,
-//    visualTransformation: VisualTransformation = VisualTransformation.None,
-//    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-//    keyboardActions: KeyboardActions = KeyboardActions.Default,
-//    error: String? = null,
-//    loading: Boolean = false,
-//    cancelable: Boolean = true,
-//    confirm: String = "Confirm",
-//    onConfirm: ((String) -> Boolean)? = null,
-//    cancel: String = "Cancel",
-//    onCancel: (() -> Boolean)? = null,
-//    onDismiss: (() -> Unit)? = null
-//) {
-//    var isShow by remember { mutableStateOf(true) }
-//    if (!isShow) return
-//
-//    var inputText by remember { mutableStateOf(TextFieldValue(text ?: "")) }
-//    var state by remember { mutableStateOf<FocusState?>(null) }
-//
-//    LaunchedEffect(state) {
-//        if (state?.isFocused == true && onFocusedText != null) {
-//            inputText = onFocusedText.invoke(inputText)
-//        }
-//    }
-//
-//    DefaultDialogImpl(
-//        title = title,
-//        message = message,
-//        confirm = confirm,
-//        onConfirm = {
-//            onConfirm?.invoke(inputText.text) ?: true
-//        },
-//        loading = loading,
-//        cancelable = cancelable,
-//        cancel = cancel,
-//        onCancel = {
-//            onCancel?.invoke() ?: true
-//        },
-//        onDismiss = {
-//            isShow = false
-//            onDismiss?.invoke()
-//        },
-//        enabledConfirm = inputText.text.isNotEmpty(),
-//        content = {
-//            SecFileOutlinedTextField(
-//                modifier = Modifier.onFocusChanged { state = it },
-//                singleLine = true,
-//                value = inputText,
-//                isError = error != null,
-//                onValueChange = { inputText = it },
-//                label = placeHolder?.let { { Text(text = it) } },
-//                supportingText = { error?.let { Text(text = it) } },
-//                visualTransformation = visualTransformation,
-//                keyboardActions = keyboardActions,
-//                keyboardOptions = keyboardOptions
-//            )
-//        }
-//    )
-//}
+@Composable
+fun ShowInputDialog(
+    title: String? = null,
+    message: String? = null,
+    placeHolder: String? = null,
+    text: String? = null,
+    onFocusedText: ((TextFieldValue) -> TextFieldValue)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    error: String? = null,
+    loading: Boolean = false,
+    cancelable: Boolean = true,
+    confirm: String = "Confirm",
+    onConfirm: ((String) -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) {
+    var isShow by remember { mutableStateOf(true) }
+    if (!isShow) return
 
-//@Preview
-//@Composable
-//private fun PreviewShowInputDialog() {
-//    ShowInputDialog(
-//        title = "asd",
-//        message = "asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd",
-//        placeHolder = "place"
-//    )
-//}
+    var inputText by remember { mutableStateOf(TextFieldValue(text ?: "")) }
+    var state by remember { mutableStateOf<FocusState?>(null) }
+
+    LaunchedEffect(state) {
+        if (state?.isFocused == true && onFocusedText != null) {
+            inputText = onFocusedText.invoke(inputText)
+        }
+    }
+
+    DefaultDialogImpl(
+        title = title,
+        message = message,
+        confirm = confirm,
+        onConfirm = {
+            onConfirm?.invoke(inputText.text) ?: true
+        },
+        loading = loading,
+        cancelable = cancelable,
+        cancel = cancel,
+        onCancel = {
+            onCancel?.invoke() ?: true
+        },
+        onDismiss = {
+            isShow = false
+            onDismiss?.invoke()
+        },
+        enabledConfirm = inputText.text.isNotEmpty(),
+        content = {
+            OutlinedTextField(
+                modifier = Modifier.onFocusChanged { state = it },
+                singleLine = true,
+                value = inputText,
+                isError = error != null,
+                onValueChange = { inputText = it },
+                label = placeHolder?.let { { Text(text = it) } },
+                supportingText = { error?.let { Text(text = it) } },
+                visualTransformation = visualTransformation,
+                keyboardActions = keyboardActions,
+                keyboardOptions = keyboardOptions
+            )
+        }
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewShowInputDialog() {
+    ShowInputDialog(
+        title = "asd",
+        message = "asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd",
+        placeHolder = "place"
+    )
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -1225,25 +1225,6 @@ fun DefaultDialogImpl(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun DialogTextButton(
-    modifier: Modifier = Modifier,
-    enabled: Boolean,
-    text: String,
-    onClick: () -> Unit
-) {
-    TextButton(
-        modifier = modifier,
-        colors = ButtonDefaults.textButtonColors(
-            disabledContentColor = MaterialTheme.colorScheme.inversePrimary
-        ),
-        enabled = enabled,
-        onClick = onClick
-    ) {
-        Text(text = text)
     }
 }
 
