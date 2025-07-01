@@ -721,11 +721,17 @@ fun ShowRequestPermissionConfirm(
 fun ShowErrorDialog(
     title: String? = null,
     error: Throwable?,
+    cancelable: Boolean = true,
+    confirm: String = "Confirm",
+    onConfirm: (() -> Boolean)? = null,
     onDismiss: (() -> Unit)? = null
 ) {
     ShowAlertDialog(
         title = title,
         message = error?.message ?: "unknown error",
+        cancelable = cancelable,
+        confirm = confirm,
+        onConfirm = onConfirm,
         onDismiss = onDismiss
     )
 }
