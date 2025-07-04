@@ -55,6 +55,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,7 +76,7 @@ import kr.co.hs.compose.RadioGroup
 @Composable
 inline fun <reified T : AccessibilityService> ShowRequestEnableAccessibilityService(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     cancelable: Boolean = true,
     confirm: String = "Apply",
     cancel: String = "Deny",
@@ -120,6 +122,25 @@ inline fun <reified T : AccessibilityService> ShowRequestEnableAccessibilityServ
     )
 }
 
+@Composable
+inline fun <reified T : AccessibilityService> ShowRequestEnableAccessibilityService(
+    title: String? = null,
+    message: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    crossinline onDismiss: () -> Unit = {},
+    crossinline onResult: (Boolean) -> Unit
+) = ShowRequestEnableAccessibilityService<T>(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
 
 inline fun <reified T : AccessibilityService> Context.isActiveAccessibilityService(): Boolean {
     val isEnabled = runCatching {
@@ -152,7 +173,7 @@ private annotation class StoragePermission
 @Composable
 fun ShowRequestAllFilesPermission(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     @StoragePermission permission: String,
     cancelable: Boolean = true,
     confirm: String = "Apply",
@@ -239,6 +260,27 @@ fun ShowRequestAllFilesPermission(
     )
 }
 
+@Composable
+fun ShowRequestAllFilesPermission(
+    title: String? = null,
+    message: String,
+    @StoragePermission permission: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestAllFilesPermission(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    permission = permission,
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
 fun getStoragePermissionState(activity: Activity, permission: String): StoragePermissionState {
     val packageInfo =
         activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_PERMISSIONS)
@@ -312,7 +354,7 @@ data class StoragePermissionState(
 @Composable
 fun ShowRequestAllFilesWritePermission(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     cancelable: Boolean = true,
     confirm: String = "Apply",
     cancel: String = "Deny",
@@ -330,9 +372,28 @@ fun ShowRequestAllFilesWritePermission(
 )
 
 @Composable
-fun ShowRequestAllFilesReadPermission(
+fun ShowRequestAllFilesWritePermission(
     title: String? = null,
     message: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestAllFilesWritePermission(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
+@Composable
+fun ShowRequestAllFilesReadPermission(
+    title: String? = null,
+    message: AnnotatedString,
     cancelable: Boolean = true,
     confirm: String = "Apply",
     cancel: String = "Deny",
@@ -342,6 +403,25 @@ fun ShowRequestAllFilesReadPermission(
     title = title,
     message = message,
     permission = Manifest.permission.READ_EXTERNAL_STORAGE,
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
+@Composable
+fun ShowRequestAllFilesReadPermission(
+    title: String? = null,
+    message: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestAllFilesReadPermission(
+    title = title,
+    message = buildAnnotatedString { append(message) },
     cancelable = cancelable,
     confirm = confirm,
     cancel = cancel,
@@ -362,7 +442,7 @@ private annotation class ReadMediaPermission
 @Composable
 private fun ShowRequestMediaReadPermission(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     @ReadMediaPermission permission: String,
     cancelable: Boolean = true,
     confirm: String = "Apply",
@@ -508,6 +588,27 @@ private fun ShowRequestMediaReadPermission(
     )
 }
 
+@Composable
+private fun ShowRequestMediaReadPermission(
+    title: String? = null,
+    message: String,
+    @ReadMediaPermission permission: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestMediaReadPermission(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    permission = permission,
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
 fun isGrantedMediaPermission(activity: Activity, permission: String): Boolean {
     val packageInfo =
         activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_PERMISSIONS)
@@ -580,7 +681,7 @@ fun isGrantedMediaPermission(activity: Activity, permission: String): Boolean {
 @Composable
 fun ShowRequestVideoReadPermission(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     cancelable: Boolean = true,
     confirm: String = "Apply",
     cancel: String = "Deny",
@@ -599,9 +700,29 @@ fun ShowRequestVideoReadPermission(
 
 @SuppressLint("InlinedApi")
 @Composable
-fun ShowRequestImageReadPermission(
+fun ShowRequestVideoReadPermission(
     title: String? = null,
     message: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestVideoReadPermission(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
+@SuppressLint("InlinedApi")
+@Composable
+fun ShowRequestImageReadPermission(
+    title: String? = null,
+    message: AnnotatedString,
     cancelable: Boolean = true,
     confirm: String = "Apply",
     cancel: String = "Deny",
@@ -620,9 +741,29 @@ fun ShowRequestImageReadPermission(
 
 @SuppressLint("InlinedApi")
 @Composable
-fun ShowRequestAudioReadPermission(
+fun ShowRequestImageReadPermission(
     title: String? = null,
     message: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestImageReadPermission(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
+@SuppressLint("InlinedApi")
+@Composable
+fun ShowRequestAudioReadPermission(
+    title: String? = null,
+    message: AnnotatedString,
     cancelable: Boolean = true,
     confirm: String = "Apply",
     cancel: String = "Deny",
@@ -639,11 +780,30 @@ fun ShowRequestAudioReadPermission(
     onResult = onResult
 )
 
+@SuppressLint("InlinedApi")
+@Composable
+fun ShowRequestAudioReadPermission(
+    title: String? = null,
+    message: String,
+    cancelable: Boolean = true,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestAudioReadPermission(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    cancelable = cancelable,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
 
 @Composable
 fun ShowRequestPermissionConfirm(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     permissions: Array<String>,
     cancelable: Boolean = true,
     checkBox: String? = null,
@@ -718,6 +878,31 @@ fun ShowRequestPermissionConfirm(
 }
 
 @Composable
+fun ShowRequestPermissionConfirm(
+    title: String? = null,
+    message: String,
+    permissions: Array<String>,
+    cancelable: Boolean = true,
+    checkBox: String? = null,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
+    confirm: String = "Apply",
+    cancel: String = "Deny",
+    onDismiss: (() -> Unit)? = null,
+    onResult: (Boolean) -> Unit
+) = ShowRequestPermissionConfirm(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    permissions = permissions,
+    cancelable = cancelable,
+    checkBox = checkBox,
+    onCheckedChange = onCheckedChange,
+    confirm = confirm,
+    cancel = cancel,
+    onDismiss = onDismiss,
+    onResult = onResult
+)
+
+@Composable
 fun ShowErrorDialog(
     title: String? = null,
     error: Throwable?,
@@ -739,7 +924,7 @@ fun ShowErrorDialog(
 @Composable
 fun ShowAlertDialog(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     cancelable: Boolean = true,
     confirm: String = "Confirm",
     onConfirm: (() -> Boolean)? = null,
@@ -761,23 +946,40 @@ fun ShowAlertDialog(
     )
 }
 
+@Composable
+fun ShowAlertDialog(
+    title: String? = null,
+    message: String,
+    cancelable: Boolean = true,
+    confirm: String = "Confirm",
+    onConfirm: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) = ShowAlertDialog(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    cancelable = cancelable,
+    confirm = confirm,
+    onConfirm = onConfirm,
+    onDismiss = onDismiss
+)
+
 @Preview
 @Composable
 private fun PreviewShowAlertDialog1() = ShowAlertDialog(
     title = "title",
-    message = "message"
+    message = buildAnnotatedString { append("message") }
 )
 
 @Preview
 @Composable
 private fun PreviewShowAlertDialog2() = ShowAlertDialog(
-    message = "message"
+    message = buildAnnotatedString { append("message") }
 )
 
 @Composable
 fun ShowConfirmDialog(
     title: String? = null,
-    message: String,
+    message: AnnotatedString,
     checkBox: String? = null,
     onCheckedChange: ((Boolean) -> Unit)? = null,
     cancelable: Boolean = true,
@@ -825,6 +1027,35 @@ fun ShowConfirmDialog(
     )
 }
 
+@Composable
+fun ShowConfirmDialog(
+    title: String? = null,
+    message: String,
+    checkBox: String? = null,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
+    cancelable: Boolean = true,
+    confirm: String = "Confirm",
+    onConfirm: (() -> Boolean)? = null,
+    neutral: String? = null,
+    onNeutral: (() -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) = ShowConfirmDialog(
+    title = title,
+    message = buildAnnotatedString { append(message) },
+    checkBox = checkBox,
+    onCheckedChange = onCheckedChange,
+    cancelable = cancelable,
+    confirm = confirm,
+    onConfirm = onConfirm,
+    neutral = neutral,
+    onNeutral = onNeutral,
+    cancel = cancel,
+    onCancel = onCancel,
+    onDismiss = onDismiss
+)
+
 @Preview
 @Composable
 private fun PreviewShowConfirmDialog1() = ShowConfirmDialog(
@@ -850,7 +1081,7 @@ private fun PreviewShowConfirmDialog3() = ShowConfirmDialog(
 @Composable
 fun ShowSelectSingleDialog(
     title: String? = null,
-    message: String? = null,
+    message: AnnotatedString? = null,
     cancelable: Boolean = true,
     initialSelectedIndex: Int,
     list: List<String>,
@@ -892,6 +1123,31 @@ fun ShowSelectSingleDialog(
     )
 }
 
+@Composable
+fun ShowSelectSingleDialog(
+    title: String? = null,
+    message: String? = null,
+    cancelable: Boolean = true,
+    initialSelectedIndex: Int,
+    list: List<String>,
+    confirm: String = "Confirm",
+    onConfirm: ((Int) -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) = ShowSelectSingleDialog(
+    title = title,
+    message = message?.let { buildAnnotatedString { append(it) } },
+    cancelable = cancelable,
+    initialSelectedIndex = initialSelectedIndex,
+    list = list,
+    confirm = confirm,
+    onConfirm = onConfirm,
+    cancel = cancel,
+    onCancel = onCancel,
+    onDismiss = onDismiss
+)
+
 @Preview
 @Composable
 private fun PreviewShowSelectSingleDialog() = ShowSelectSingleDialog(
@@ -905,7 +1161,7 @@ private fun PreviewShowSelectSingleDialog() = ShowSelectSingleDialog(
 @Composable
 fun ShowSelectMultipleDialog(
     title: String? = null,
-    message: String? = null,
+    message: AnnotatedString? = null,
     cancelable: Boolean = true,
     initialSelectedIndex: List<Int>,
     list: List<String>,
@@ -971,6 +1227,31 @@ fun ShowSelectMultipleDialog(
     )
 }
 
+@Composable
+fun ShowSelectMultipleDialog(
+    title: String? = null,
+    message: String? = null,
+    cancelable: Boolean = true,
+    initialSelectedIndex: List<Int>,
+    list: List<String>,
+    confirm: String = "Confirm",
+    onConfirm: ((List<Int>) -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) = ShowSelectMultipleDialog(
+    title = title,
+    message = message?.let { buildAnnotatedString { append(it) } },
+    cancelable = cancelable,
+    initialSelectedIndex = initialSelectedIndex,
+    list = list,
+    confirm = confirm,
+    onConfirm = onConfirm,
+    cancel = cancel,
+    onCancel = onCancel,
+    onDismiss = onDismiss
+)
+
 @Preview
 @Composable
 private fun PreviewShowSelectMultipleDialog() = ShowSelectMultipleDialog(
@@ -984,7 +1265,7 @@ private fun PreviewShowSelectMultipleDialog() = ShowSelectMultipleDialog(
 @Composable
 fun ShowInputDialog(
     title: String? = null,
-    message: String? = null,
+    message: AnnotatedString? = null,
     placeHolder: String? = null,
     text: String? = null,
     onFocusedText: ((TextFieldValue) -> TextFieldValue)? = null,
@@ -1047,6 +1328,43 @@ fun ShowInputDialog(
     )
 }
 
+@Composable
+fun ShowInputDialog(
+    title: String? = null,
+    message: String? = null,
+    placeHolder: String? = null,
+    text: String? = null,
+    onFocusedText: ((TextFieldValue) -> TextFieldValue)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    error: String? = null,
+    loading: Boolean = false,
+    cancelable: Boolean = true,
+    confirm: String = "Confirm",
+    onConfirm: ((String) -> Boolean)? = null,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    onDismiss: (() -> Unit)? = null
+) = ShowInputDialog(
+    title = title,
+    message = message?.let { buildAnnotatedString { append(it) } },
+    placeHolder = placeHolder,
+    text = text,
+    onFocusedText = onFocusedText,
+    visualTransformation = visualTransformation,
+    keyboardOptions = keyboardOptions,
+    keyboardActions = keyboardActions,
+    error = error,
+    loading = loading,
+    cancelable = cancelable,
+    confirm = confirm,
+    onConfirm = onConfirm,
+    cancel = cancel,
+    onCancel = onCancel,
+    onDismiss = onDismiss
+)
+
 @Preview
 @Composable
 private fun PreviewShowInputDialog() {
@@ -1071,7 +1389,7 @@ fun DefaultDialogImpl(
     dialogPadding: PaddingValues = DialogPadding,
     title: String? = null,
     titlePadding: PaddingValues = TitlePadding,
-    message: String? = null,
+    message: AnnotatedString? = null,
     textPadding: PaddingValues = TextPadding,
     content: @Composable (() -> Unit)? = null,
     cancelable: Boolean = true,
@@ -1230,6 +1548,59 @@ fun DefaultDialogImpl(
         }
     }
 }
+
+@Composable
+fun DefaultDialogImpl(
+    modifier: Modifier = Modifier,
+    properties: DialogProperties = DialogProperties(),
+    surfaceModifier: Modifier = Modifier,
+    shape: Shape = AlertDialogDefaults.shape,
+    containerColor: Color = AlertDialogDefaults.containerColor,
+    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
+    theme: MaterialTheme = MaterialTheme,
+    dialogPadding: PaddingValues = DialogPadding,
+    title: String? = null,
+    titlePadding: PaddingValues = TitlePadding,
+    message: String? = null,
+    textPadding: PaddingValues = TextPadding,
+    content: @Composable (() -> Unit)? = null,
+    cancelable: Boolean = true,
+    loading: Boolean = false,
+    confirm: String = "Confirm",
+    onConfirm: () -> Boolean,
+    neutral: String? = null,
+    onNeutral: (() -> Boolean)? = null,
+    enabledConfirm: Boolean = true,
+    cancel: String = "Cancel",
+    onCancel: (() -> Boolean)? = null,
+    enabledCancel: Boolean = true,
+    onDismiss: (() -> Unit)? = null
+) = DefaultDialogImpl(
+    modifier = modifier,
+    properties = properties,
+    surfaceModifier = surfaceModifier,
+    shape = shape,
+    containerColor = containerColor,
+    tonalElevation = tonalElevation,
+    theme = theme,
+    dialogPadding = dialogPadding,
+    title = title,
+    titlePadding = titlePadding,
+    message = message?.let { buildAnnotatedString { append(it) } },
+    textPadding = textPadding,
+    content = content,
+    cancelable = cancelable,
+    loading = loading,
+    confirm = confirm,
+    onConfirm = onConfirm,
+    neutral = neutral,
+    onNeutral = onNeutral,
+    enabledConfirm = enabledConfirm,
+    cancel = cancel,
+    onCancel = onCancel,
+    enabledCancel = enabledCancel,
+    onDismiss = onDismiss
+)
 
 private val DialogPadding = PaddingValues(all = 24.dp)
 private val TitlePadding = PaddingValues(bottom = 16.dp)
